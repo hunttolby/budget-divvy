@@ -3,7 +3,7 @@ A full CRUD budgeting web app built for an interview with Divvy App.
 Over the course of this project, I learned the basics of Elixir with Phoenix and setting up an SQL server with them and cleaner way to write some React. Overall this project was a blast!
 
 ### Prerequisites
-You will need to install Elixir, Hex, Phoenix, and Node to run this project. We will install Hex and Phoenix later.
+You will need to install Elixir, Hex, Phoenix, Node, and PostgreSQL to run this project. We will install Hex and Phoenix later.
 
 To install Elixir, go to the link below.
 
@@ -12,6 +12,20 @@ To install Elixir, go to the link below.
 To install Node, go to the link below.
 
 [Node Install](https://nodejs.org/en/download/)
+
+To install PostgreSQL, go to the link below and download the binary package for your OS
+
+[PostgreSQL Install](https://www.postgresql.org/download/)
+
+Following the EnterpriseDB installer and install postgres 11.
+
+For the USERNAME and PASSWORD set them as
+
+`postgres`
+
+Leave the port as
+
+`5432`
 
 
 ### Installing Dependencies
@@ -31,6 +45,22 @@ Then install Phoenix by running..
 Now for any dependencies needed with the server run
 
 `mix deps.get`
+
+Then get node dependencies
+
+`cd assets && npm install`
+
+Then navigate back to the phx_budget folder
+
+`cd ..`
+
+Now we need the postgres database built. Build it by running..
+
+`mix ecto.create`
+
+Next, we create the transaction table in the database by running..
+
+`mix ecto.migrate`
 
 Great, the back end server is ready to go! In the same folder (phx-budget), get it started by running..
 
