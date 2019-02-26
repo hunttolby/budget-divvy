@@ -27,6 +27,12 @@ Leave the port as
 
 `5432`
 
+###### Note : If you have postgres installed already and have a different username/password, you will need to navigate to
+
+`phx_budget/config/devs.exs`
+
+###### And change Line 71 and 72 to your local postgres username/password
+
 
 ### Installing Dependencies
 
@@ -56,11 +62,7 @@ Then navigate back to the phx_budget folder
 
 Now we need the postgres database built. Build it by running..
 
-`mix ecto.create`
-
-Next, we create the transaction table in the database by running..
-
-`mix ecto.migrate`
+`mix ecto.setup`
 
 Great, the back end server is ready to go! In the same folder (phx-budget), get it started by running..
 
