@@ -69,7 +69,7 @@ config :phoenix, :plug_init_mode, :runtime
 # Configure your database
 config :phx_budget, PhxBudget.Repo,
   username: "postgres",
-  password: "starWARS95",
+  password: "postgres",
   database: "phx_budget_dev",
   hostname: "localhost",
   pool_size: 10
