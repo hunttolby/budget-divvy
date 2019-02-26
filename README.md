@@ -70,7 +70,7 @@ Great, the back end server is ready to go! In the same folder (phx-budget), get 
 
 Now in a seperate Terminal/Command Prompt, change directories into..
 
-`cd budgeter`
+`/budgeter/`
 
 Then install dependencies by running ..
 
