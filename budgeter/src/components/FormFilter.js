@@ -12,11 +12,9 @@ const FormFilter = ({ props, handleFilterCategory, filterTransactions, resetFilt
         closeOnChange
         options={options}
         onChange={handleFilterCategory.bind(this)}
+        onBlur={() => filterTransactions(props.filterCategory)}
       />
-      <Button.Group fluid>
-        <Button size="small" color="blue" inverted onClick={() => filterTransactions(props.filterCategory)}> Filter </Button>
-        <Button size="small" color="red" inverted onClick={() => resetFilter()}> Reset </Button>
-      </Button.Group>
+        <Button size="small" color="red" inverted fluid onClick={() => resetFilter()}> Reset Filter</Button>
     </Form>
 )
 

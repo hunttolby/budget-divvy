@@ -1,11 +1,10 @@
 import React from "react"
 import { Table, Icon } from "semantic-ui-react"
 
-import options from "../constants/options"
 import * as utils from "../functions/utils"
 
-const TableNormal = ({transaction, key, props, changeToUpdate}) => (
-  <Table.Row key={key} onClick={() => changeToUpdate(key)}>
+const TableNormal = ({transaction, key, index, props, changeToUpdate}) => (
+  <Table.Row key={key} onClick={() => changeToUpdate(index)}>
     <Table.Cell width="3"> {transaction.category} </Table.Cell>
     <Table.Cell> {transaction.name} </Table.Cell>
     <Table.Cell collapsing textAlign='right' disabled>

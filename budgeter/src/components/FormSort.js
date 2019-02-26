@@ -1,5 +1,5 @@
 import React from "react"
-import { Form, Button } from "semantic-ui-react"
+import { Form } from "semantic-ui-react"
 
 import sortOptions from "../constants/sortOptions.js"
 
@@ -12,10 +12,8 @@ const FormSort = ({ props, handleSort, sortTransactions}) => (
         closeOnChange
         options={sortOptions}
         onChange={handleSort.bind(this)}
+        onBlur={() => sortTransactions()}
       />
-      <Button.Group fluid>
-        <Button size="small" color="blue" inverted fluid onClick={() => sortTransactions()}> Sort </Button>
-      </Button.Group>
     </Form>
 )
 

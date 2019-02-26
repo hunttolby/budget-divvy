@@ -1,11 +1,8 @@
 import React from "react";
-import { Table, Button, Dropdown, Input } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 
 import TableUpdate from "./TableUpdate"
 import TableNormal from "./TableNormal"
-
-import * as utils from "../functions/utils"
-import options from "../constants/options"
 
 const TransactionTable = ({ props, deleteTransaction, updateTransaction, changeToUpdate, handleUpdateCategory, handleUpdateName, handleUpdateAmount }) => (
   <Table celled striped style={{marginTop: "12px"}} selectable>
@@ -24,6 +21,7 @@ const TransactionTable = ({ props, deleteTransaction, updateTransaction, changeT
             <TableUpdate
               transaction={transaction}
               key={key}
+              index={key}
               props={props}
               deleteTransaction={() => deleteTransaction(key)}
               updateTransaction={() => updateTransaction(key)}
@@ -37,6 +35,7 @@ const TransactionTable = ({ props, deleteTransaction, updateTransaction, changeT
           <TableNormal
             transaction={transaction}
             key={key}
+            index={key}
             props={props}
             changeToUpdate={() => changeToUpdate(key)}
           />

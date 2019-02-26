@@ -3,7 +3,7 @@ import { Table, Input, Dropdown, Button } from "semantic-ui-react";
 
 import options from "../constants/options"
 
-const TableUpdate = ({transaction, key, props, deleteTransaction, updateTransaction, handleUpdateCategory, handleUpdateName, handleUpdateAmount }) => (
+const TableUpdate = ({transaction, key, index, props, deleteTransaction, updateTransaction, handleUpdateCategory, handleUpdateName, handleUpdateAmount }) => (
   <Table.Row key={key}>
     <Table.Cell width="3">
       <Dropdown
@@ -31,10 +31,10 @@ const TableUpdate = ({transaction, key, props, deleteTransaction, updateTransact
     </Table.Cell>
     <Table.Cell collapsing>
       <Button.Group>
-        <Button color="green" inverted compact onClick={()=> updateTransaction(key)}>
+        <Button color="green" inverted compact onClick={()=> updateTransaction(index)}>
           Save
         </Button>
-        <Button color="red" inverted compact onClick={()=> deleteTransaction(key)}>
+        <Button color="red" inverted compact onClick={()=> deleteTransaction(index)}>
           Delete
         </Button>
       </Button.Group>

@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Segment, Container, Form, Button, Table, Header, Grid, Card, Sticky, Checkbox } from "semantic-ui-react"
+import { Segment, Container, Header, Grid, Sticky } from "semantic-ui-react"
 import axios from "axios"
 
 //Importing all needed components and files
@@ -10,8 +10,6 @@ import FormSort from "../components/FormSort"
 import BalanceCard from "../components/BalanceCard"
 
 import * as utils from "../functions/utils"
-import options from "../constants/options.js"
-import sortOptions from "../constants/sortOptions.js"
 
 class Transactions extends Component {
   constructor(props){
@@ -132,7 +130,9 @@ class Transactions extends Component {
     .then(response => {
       this.setState({
         transactions: response.data.transactions,
-        balance: newBalance
+        balance: newBalance,
+        editTransaction: false,
+        clickedTransaction: "",
       })
     })
   };
@@ -173,7 +173,7 @@ class Transactions extends Component {
 
   //Sort transactions depending on what sort you choose.
   sortTransactions = () => {
-    let sortedTrans =[]
+    let sortedTrans = []
     if(this.state.sortQuery === "Lowest"){
       sortedTrans = this.state.transactions.sort((a, b) => {
         let amtA = a.amount
@@ -203,9 +203,9 @@ class Transactions extends Component {
 
   //This resets the filter that was done, it takes a previous version of the state and puts it as current.
   resetFilter = () => {
-    this.setState({
-      transactions: this.state.normalTrans,
-    })
+      this.setState({
+        transactions: this.state.normalTrans,
+      })
   };
 
   //This filters the transactions by taking an input of category and filtering out any that dont have that category
@@ -276,18 +276,18 @@ render() {
                         handleNewAmount={this.handleNewAmount}
                         isInvalid={isInvalid}
                       />
+                    <Header as="h4"> Sort By </Header>
+                      <FormSort
+                        props={this.state}
+                        handleSort={this.handleSort}
+                        sortTransactions={this.sortTransactions}
+                      />
                     <Header as="h4"> Filter </Header>
                       <FormFilter
                         props={this.state}
                         handleFilterCategory={this.handleFilterCategory}
                         filterTransactions={this.filterTransactions}
                         resetFilter={this.resetFilter}
-                      />
-                    <Header as="h4"> Sort By </Header>
-                      <FormSort
-                        props={this.state}
-                        handleSort={this.handleSort}
-                        sortTransactions={this.sortTransactions}
                       />
                   </Segment>
                 </div>
