@@ -18,7 +18,7 @@ To install Node, go to the link below.
 
 To install Hex, open up the folder in Terminal/Command Prompt, and change directories into..
 
-`cd phx-budget`
+`cd phx_budget`
 
 Then install Hex by running..
 
