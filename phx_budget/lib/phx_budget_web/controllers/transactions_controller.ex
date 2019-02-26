@@ -29,4 +29,16 @@ defmodule PhxBudget.TransactionsController do
     transactions = Repo.all(Transactions)
     render conn, "index.json", transactions: transactions
   end
+
+  def update(conn, %{"id" => id, "transactions" => transactions_params}) do
+    transaction = Repo.get(Transactions, id)
+    changeset = Transactions.changeset(transaction, transactions_params)
+
+    case Repo.update(changeset) do
+      {:ok, _transaction} ->
+        transactions = Repo.all(Transactions)
+        render conn, "index.json", transactions: transactions
+    end
+  end
+
 end

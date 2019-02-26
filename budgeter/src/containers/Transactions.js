@@ -3,12 +3,13 @@ import { Segment, Container, Form, Button, Table, Header, Grid, Card, Sticky, Ch
 import axios from "axios"
 
 //Importing all needed components and files
-import * as utils from "../functions/utils"
 import TransactionTable from "../components/TransactionTable"
 import FormTransaction from "../components/FormTransaction"
 import FormFilter from "../components/FormFilter"
 import FormSort from "../components/FormSort"
 import BalanceCard from "../components/BalanceCard"
+
+import * as utils from "../functions/utils"
 import options from "../constants/options.js"
 import sortOptions from "../constants/sortOptions.js"
 
@@ -21,10 +22,15 @@ class Transactions extends Component {
       newCategory: "",
       newName: "",
       newAmount: "",
+      updateCategory: "",
+      updateName: "",
+      updateAmount: "",
       balance: 0,
       sortQuery:"",
       normalTrans: [],
       isRoman: "",
+      editTransaction: false,
+      clickedTransaction: ""
     }
   };
 
@@ -62,6 +68,20 @@ class Transactions extends Component {
   //Handles the input of newAmount
   handleNewAmount = (event) => {
     this.setState({newAmount: event.target.value})
+  };
+
+  handleUpdateCategory = (event, data) => {
+    this.setState({updateCategory: data.value})
+  };
+
+  //Handles the input of newName
+  handleUpdateName = (event) => {
+    this.setState({updateName: event.target.value})
+  };
+
+  //Handles the input of newAmount
+  handleUpdateAmount = (event) => {
+    this.setState({updateAmount: event.target.value})
   };
 
   //Handles the input of filterCategory
@@ -117,6 +137,40 @@ class Transactions extends Component {
     })
   };
 
+  updateTransaction = (key) => {
+    let currTransaction = this.state.transactions[key]
+    let id = currTransaction.id
+    let uCat = this.state.updateCategory !== "" ? this.state.updateCategory : this.state.transactions[key].category
+    let uName = this.state.updateName !== "" ? this.state.updateName : this.state.transactions[key].name
+    let uAmt =  this.state.updateAmount !== "" ? this.state.updateAmount : this.state.transactions[key].amount
+
+    if(uCat !== "Income"){
+      uAmt *= -1
+    }
+
+    let updatedBalance = parseFloat(utils.updateBalance(this.state.balance, -currTransaction.amount, uAmt)).toFixed(2)
+
+      axios.put(`http://localhost:4000/api/transactions/${id}`, {
+        headers: {"Content-Type": "application/json"},
+          transactions: {
+            category: uCat,
+            name: uName,
+            amount: uAmt,
+          }
+      })
+      .then(response => {
+        this.setState({
+          transactions: response.data.transactions,
+          editTransaction: false,
+          balance: updatedBalance,
+          clickedTransaction: "",
+          updateName: "",
+          updateCategory: "",
+          updateAmount: "",
+        })
+      })
+  }
+
   //Sort transactions depending on what sort you choose.
   sortTransactions = () => {
     let sortedTrans =[]
@@ -124,7 +178,7 @@ class Transactions extends Component {
       sortedTrans = this.state.transactions.sort((a, b) => {
         let amtA = a.amount
         let amtB = b.amount
-
+        //this takes the amounts and compares them and returns the lower one first.
         if(amtA < amtB) return -1;
         if(amtA > amtB) return 1;
         return 0;
@@ -136,7 +190,7 @@ class Transactions extends Component {
       sortedTrans = this.state.transactions.sort((a, b) => {
         let amtA = a.amount
         let amtB = b.amount
-
+        //this takes the amounts and compares them and returns the higher one first.
         if(amtA < amtB) return 1;
         if(amtA > amtB) return -1;
         return 0;
@@ -177,41 +231,71 @@ onChange = () => {
   this.setState({ isRoman: !this.state.isRoman})
 }
 
-  render() {
-    const isInvalid =
-      this.state.newName === "" ||
-      this.state.newCategory === "" ||
-      this.state.newAmount === "";
+//Changes the status of the transaction to update so you can update the fields.
+changeToUpdate = (id) => {
+  this.setState({ editTransaction: true, clickedTransaction: id})
+  console.log(this.state.clickedTransaction)
+}
 
-    const { contextRef } = this.state
+render() {
+  const isInvalid =
+    this.state.newName === "" ||
+    this.state.newCategory === "" ||
+    this.state.newAmount === "";
+
+  const { contextRef } = this.state
 
 
-    return(
-      <Container>
+  return(
+    <Container>
       <div ref={this.handleContextRef}>
-      <Grid divided="vertically" stackable>
-        <Grid.Row columns={2}>
-          <Grid.Column width="12" floated="left">
-            <TransactionTable props={this.state} deleteTransaction={this.deleteTransaction}/>
-          </Grid.Column>
-          <Grid.Column width={4} floated="right">
-          <Sticky context={contextRef}>
-            <div style={{paddingTop: "12px"}}>
-              <BalanceCard props={this.state} onChange={this.onChange} />
-              <Segment raised >
-                <Header as="h4"> Add Transaction </Header>
-                  <FormTransaction props={this.state} handleSubmit={this.handleSubmit} handleNewCategory={this.handleNewCategory} handleNewName={this.handleNewName} handleNewAmount={this.handleNewAmount} isInvalid={isInvalid}  />
-                <Header as="h4"> Filter </Header>
-                  <FormFilter props={this.state} handleFilterCategory={this.handleFilterCategory} filterTransactions={this.filterTransactions} resetFilter={this.resetFilter} />
-                <Header as="h4"> Sort By </Header>
-                  <FormSort props={this.state} handleSort={this.handleSort} sortTransactions={this.sortTransactions} />
-              </Segment>
-            </div>
-          </Sticky>
-          </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+        <Grid divided="vertically" stackable>
+          <Grid.Row columns={2}>
+            <Grid.Column width="12" floated="left">
+              <TransactionTable
+                props={this.state}
+                changeToUpdate={this.changeToUpdate}
+                deleteTransaction={this.deleteTransaction}
+                updateTransaction={this.updateTransaction}
+                handleUpdateCategory={this.handleUpdateCategory}
+                handleUpdateName={this.handleUpdateName}
+                handleUpdateAmount={this.handleUpdateAmount}
+              />
+            </Grid.Column>
+            <Grid.Column width={4} floated="right">
+              <Sticky context={contextRef}>
+                <div style={{paddingTop: "12px"}}>
+                  <BalanceCard props={this.state} onChange={this.onChange} />
+                  <Segment raised >
+                    <Header as="h4"> Add Transaction </Header>
+                      <FormTransaction
+                        props={this.state}
+                        handleSubmit={this.handleSubmit}
+                        handleNewCategory={this.handleNewCategory}
+                        handleNewName={this.handleNewName}
+                        handleNewAmount={this.handleNewAmount}
+                        isInvalid={isInvalid}
+                      />
+                    <Header as="h4"> Filter </Header>
+                      <FormFilter
+                        props={this.state}
+                        handleFilterCategory={this.handleFilterCategory}
+                        filterTransactions={this.filterTransactions}
+                        resetFilter={this.resetFilter}
+                      />
+                    <Header as="h4"> Sort By </Header>
+                      <FormSort
+                        props={this.state}
+                        handleSort={this.handleSort}
+                        sortTransactions={this.sortTransactions}
+                      />
+                  </Segment>
+                </div>
+              </Sticky>
+            </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
       </Container>
     )
   }

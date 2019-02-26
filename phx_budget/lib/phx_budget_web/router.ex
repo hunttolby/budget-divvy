@@ -30,6 +30,7 @@ defmodule PhxBudgetWeb.Router do
     post "/transactions", TransactionsController, :create
     get "/transactions/:id", TransactionsController, :show
     delete "/transactions/:id", TransactionsController, :delete
+    put "/transactions/:id", TransactionsController, :update
     options "/transactions/:id", TransactionsController, :nothing
     options "/transactions", TransactionsController, :nothing
   end

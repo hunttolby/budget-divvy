@@ -1,5 +1,4 @@
 import React from "react"
-
 import { Card, Checkbox } from "semantic-ui-react"
 
 import * as utils from "../functions/utils"
